@@ -8,7 +8,7 @@ def build_enrollment_data(
         {
             "School_id": get_school_id(sections_data, enrollment.class_id),
             "Section_id": enrollment.class_id,
-            "Student_id": enrollment.user,
+            "Student_id": int(enrollment.user.split("S")[-1]),
         }
         for enrollment in enrollments_list
         if enrollment.role == "student"

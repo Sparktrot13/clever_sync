@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-import pandas as pd
 from dotenv import load_dotenv
 from oneroster_api import Classes, Demographics, Enrollments, Users, set_credentials
 
@@ -18,34 +17,20 @@ def setup() -> None:
     )
 
 
+def import_oneroster_data() -> dict:
+    return {
+        "users": Users.retrieve_all(),
+        "enrollments": Enrollments.retrieve_all(),
+        "demographics": Demographics.retrieve_all(),
+        "classes": Classes.retrieve_all(),
+    }
+
+
 def main() -> None:
     setup()
-    classes = Classes.retrieve_all()
-    users = Users.retrieve_all()
-    enrollments = Enrollments.retrieve_all()
-    demographics = Demographics.retrieve_all()
-
-    teachers_data = cs.build_teacher_data(users)
-    sections_data = cs.create_sections_sheet(
-        classes=classes, enrollments=enrollments, teachers=teachers_data
-    )
-    enrollments_data = cs.build_enrollment_data(
-        enrollments_list=enrollments, sections_data=sections_data
-    )
-    students_data = cs.build_student_data(
-        user_list=users, enrollment_data=enrollments_data, demographic_data=demographics
-    )
-
-    teachers_sheet = pd.DataFrame(teachers_data)
-    sections_sheet = pd.DataFrame(sections_data)
-    enrollments_sheet = pd.DataFrame(enrollments_data)
-    students_sheet = pd.DataFrame(students_data)
-
-    teachers_sheet.to_csv("data/clever/teachers.csv", index=False)
-    sections_sheet.to_csv("data/clever/sections.csv", index=False)
-    enrollments_sheet.to_csv("data/clever/enrollments.csv", index=False)
-    students_sheet.to_csv("data/clever/students.csv", index=False)
-    print(enrollments_sheet)
+    oneroster_data = import_oneroster_data()
+    clever_data = cs.build_clever_sheets(oneroster_data)
+    cs.export_clever_sheets(clever_data, Path("data/clever"))
 
 
 if __name__ == "__main__":

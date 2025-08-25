@@ -1,7 +1,7 @@
 from oneroster_api import Classes, Enrollments
 
 
-def create_sections_sheet(
+def build_sections_data(
     enrollments: list[Enrollments], classes: list[Classes], teachers: list
 ) -> dict:
     return [
