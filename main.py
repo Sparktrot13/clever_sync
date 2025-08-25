@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from oneroster_api import Classes, Enrollment, User, set_credentials
 
-from clever_sync import build_teacher_data, create_sections_sheet
+import clever_sync as cs
 
 
 def setup() -> None:
@@ -23,18 +23,24 @@ def main() -> None:
     classes = Classes.retrieve_all()
     enrollments = Enrollment.retrieve_all()
     users = User.retrieve_all()
+    enrollments = Enrollment.retrieve_all()
 
-    teachers_dict = build_teacher_data(users)
-    sections_dict = create_sections_sheet(
+    teachers_dict = cs.build_teacher_data(users)
+    sections_dict = cs.create_sections_sheet(
         classes=classes, enrollments=enrollments, teachers=teachers_dict
+    )
+    enrollments_dict = cs.build_enrollment_data(
+        enrollments_list=enrollments, sections_data=sections_dict
     )
 
     teachers = pd.DataFrame(teachers_dict)
     sections = pd.DataFrame(sections_dict)
+    enrollments = pd.DataFrame(enrollments_dict)
 
     teachers.to_csv("data/clever/teachers.csv", index=False)
     sections.to_csv("data/clever/sections.csv", index=False)
-    print(sections)
+    enrollments.to_csv("data/clever/enrollments.csv", index=False)
+    print(enrollments)
 
 
 if __name__ == "__main__":

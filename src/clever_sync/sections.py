@@ -37,7 +37,7 @@ def get_enrollment(
 
 def get_school_id(teacher_id: str, teacher_list: list) -> str | None:
     for teacher in teacher_list:
-        print(teacher["Teacher_number"])
+        # print(teacher["Teacher_number"])
         if teacher["Teacher_number"] == teacher_id:
             return teacher["School_id"]
     return None
