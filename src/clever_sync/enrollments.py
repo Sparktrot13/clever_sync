@@ -1,8 +1,8 @@
-from oneroster_api import Enrollment
+from oneroster_api import Enrollments
 
 
 def build_enrollment_data(
-    enrollments_list: list[Enrollment], sections_data: list[dict]
+    enrollments_list: list[Enrollments], sections_data: list[dict]
 ) -> list[dict]:
     return [
         {

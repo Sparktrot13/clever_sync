@@ -1,14 +1,16 @@
-from oneroster_api import Classes, Enrollment
+from oneroster_api import Classes, Enrollments
 
 
 def create_sections_sheet(
-    enrollments: list[Enrollment], classes: list[Classes], teachers: list
+    enrollments: list[Enrollments], classes: list[Classes], teachers: list
 ) -> dict:
-    return [build_section_entry(class_data, enrollments, teachers) for class_data in classes]
+    return [
+        build_section_entry(class_data, enrollments, teachers) for class_data in classes
+    ]
 
 
 def build_section_entry(
-    class_data: Classes, enrollments_list: list[Enrollment], teachers: list
+    class_data: Classes, enrollments_list: list[Enrollments], teachers: list
 ) -> dict:
     enrollment = get_enrollment(enrollments_list, class_data.sourced_id)
     return {
@@ -26,8 +28,8 @@ def build_section_entry(
 
 
 def get_enrollment(
-    enrollments_list: list[Enrollment], class_id: str | int
-) -> Enrollment | None:
+    enrollments_list: list[Enrollments], class_id: str | int
+) -> Enrollments | None:
     for item in enrollments_list:
         if item.role == "teacher" and item.class_id == class_id:
             return item

@@ -2,7 +2,7 @@ import csv
 import subprocess
 from pathlib import Path
 
-from oneroster_api import User
+from oneroster_api import Users
 
 building_map = {
     "A3700.1": "A3700.1",
@@ -12,7 +12,7 @@ building_map = {
 }
 
 
-def build_teacher_data(users_list: list[User]) -> list[dict]:
+def build_teacher_data(users_list: list[Users]) -> list[dict]:
     user_data = get_gam_user_data()
     teachers = [
         {
