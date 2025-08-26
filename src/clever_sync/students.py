@@ -16,7 +16,9 @@ def build_student_data(
 def student_data(
     student: Users, enrollment_data: list[dict], demographic_data: list[Demographics]
 ) -> dict:
-    student.email = check_email(student.email, student.preferred_first_name, student.preferred_last_name)
+    student_email = check_email(
+        student.email, student.preferred_first_name, student.preferred_last_name
+    )
     return {
         "School_id": get_school_id_from_enrollment(enrollment_data, student.identifier),
         "Student_id": student.identifier,
@@ -29,8 +31,8 @@ def student_data(
         "Preferred_first_name": student.preferred_first_name,
         "Grade": student.grades,
         "DOB": get_date_of_birth(demographic_data, student.sourced_id),
-        "Student_email": student.email,
-        "Username": student.email.split("@")[0],
+        "Student_email": student_email,
+        "Username": student_email.split("@")[0],
     }
 
 
