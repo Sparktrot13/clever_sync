@@ -15,8 +15,8 @@ __all__ = [
 ]
 
 
-def build_clever_sheets(oneroster_data: list[dict]) -> dict:
-    teachers_data = build_teacher_data(oneroster_data["users"])
+def build_clever_sheets(oneroster_data: list[dict], gam_user_data: list[dict]) -> dict:
+    teachers_data = build_teacher_data(oneroster_data["users"], gam_user_data)
     sections_data = build_sections_data(
         oneroster_data["enrollments"], oneroster_data["classes"], teachers_data
     )

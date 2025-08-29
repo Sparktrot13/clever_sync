@@ -12,11 +12,11 @@ building_map = {
 }
 
 
-def build_teacher_data(users_list: list[Users]) -> list[dict]:
-    user_data = get_gam_user_data()
+def build_teacher_data(users_list: list[Users], gam_user_data: list[dict]) -> list[dict]:
+    # gam_user_data = get_gam_user_data()
     teachers = [
         {
-            "School_id": get_building_id(user_data, teacher.email),
+            "School_id": get_building_id(gam_user_data, teacher.email),
             "Teacher_id": teacher.identifier,
             "Teacher_number": teacher.sourced_id,
             "State_id": teacher.state_id,
@@ -35,11 +35,11 @@ def build_teacher_data(users_list: list[Users]) -> list[dict]:
     ]
 
 
-def get_gam_user_data():
+def get_gam_user_data(import_dir: Path = Path()):
     cmd = ["gam", "print", "users", "fields", "locations"]
     process = subprocess.run(cmd, capture_output=True, text=True, check=True)
     reader = csv.DictReader(process.stdout)
-    user_data_path = Path("data/import/users.csv")
+    user_data_path = Path(import_dir / "users.csv")
     with open(user_data_path, "w") as file:
         file.write(process.stdout)
     with open(user_data_path, "r") as file:
@@ -55,5 +55,4 @@ def get_building_id(user_list: list[dict], email: str) -> str | None:
         if user["email"].lower().strip() == email.lower().strip():
             if user["building_id"] in building_map.keys():
                 return building_map[user["building_id"]]
-
     return None
