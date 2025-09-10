@@ -1,7 +1,3 @@
-import csv
-import subprocess
-from pathlib import Path
-
 from oneroster_api import Users
 
 building_map = {
@@ -12,8 +8,9 @@ building_map = {
 }
 
 
-def build_teacher_data(users_list: list[Users], gam_user_data: list[dict]) -> list[dict]:
-    # gam_user_data = get_gam_user_data()
+def build_teacher_data(
+    users_list: list[Users], gam_user_data: list[dict]
+) -> list[dict]:
     teachers = [
         {
             "School_id": get_building_id(gam_user_data, teacher.email),
@@ -35,24 +32,10 @@ def build_teacher_data(users_list: list[Users], gam_user_data: list[dict]) -> li
     ]
 
 
-def get_gam_user_data(import_dir: Path = Path()):
-    cmd = ["gam", "print", "users", "fields", "locations"]
-    process = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    reader = csv.DictReader(process.stdout)
-    user_data_path = Path(import_dir / "users.csv")
-    with open(user_data_path, "w") as file:
-        file.write(process.stdout)
-    with open(user_data_path, "r") as file:
-        reader = csv.DictReader(file)
-        return [
-            {"email": row["primaryEmail"], "building_id": row["locations.0.buildingId"]}
-            for row in reader
-        ]
-
-
 def get_building_id(user_list: list[dict], email: str) -> str | None:
     for user in user_list:
-        if user["email"].lower().strip() == email.lower().strip():
-            if user["building_id"] in building_map.keys():
-                return building_map[user["building_id"]]
+        if user["primaryEmail"].lower().strip() == email.lower().strip():
+            if user["locations.0.buildingId"] in building_map.keys():
+                return building_map[user["locations.0.buildingId"]]
+
     return None

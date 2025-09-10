@@ -2,6 +2,7 @@ import csv
 from pathlib import Path
 
 from .enrollments import build_enrollment_data
+from .sftp_sync import set_sftp_credentials, send_files
 from .sections import build_sections_data
 from .students import build_student_data
 from .teachers import build_teacher_data
@@ -12,6 +13,8 @@ __all__ = [
     "build_student_data",
     "build_enrollment_data",
     "build_student_data",
+    "send_files",
+    "set_sftp_credentials",
 ]
 
 
