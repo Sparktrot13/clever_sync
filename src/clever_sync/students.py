@@ -6,10 +6,11 @@ from oneroster_api import Demographics, Users
 def build_student_data(
     user_list: list[Users], enrollment_data: list[dict], demographic_data: list[dict]
 ) -> list[dict]:
+    current_students = [enrollment["Student_id"] for enrollment in enrollment_data]
     return [
         student_data(user, enrollment_data, demographic_data)
         for user in user_list
-        if user.role == "student"
+        if user.role == "student" and user.identifier in current_students
     ]
 
 
